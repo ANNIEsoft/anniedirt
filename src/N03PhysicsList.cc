@@ -42,6 +42,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4PhysListFactorySingleton.hh"  // self-register
 

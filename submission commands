@@ -13,7 +13,10 @@ source /grid/fermiapp/products/genie/externals/setup
 <anniegpvm01.fnal.gov> export NEVENTS=10000
 <anniegpvm01.fnal.gov> export NJOBS=1000
 <anniegpvm01.fnal.gov> kinit moflaher
-<anniegpvm01.fnal.gov> jobsub_submit -g --group $GROUP -N ${NJOBS} file://$ANNIEPATH/run_annie_g4dirt.sh -r ${FIRSTRUN} -v -i /pnfs/annie/persistent/users/rhatcher/genie -o /pnfs/annie/persistent/users/${USER}/g4dirt
+WORLD:
+<anniegpvm01.fnal.gov> jobsub_submit -g --group $GROUP -N ${NJOBS} file://$ANNIEPATH/run_annie_g4dirt_newgenie.sh -r ${FIRSTRUN} -n ${NEVENTS} -v -i /pnfs/annie/persistent/users/vfischer/genie/BNB_World_10k_29-06-17 -o /pnfs/annie/persistent/users/moflaher/g4dirt_vincentsgenie/world
+TANK:
+<anniegpvm01.fnal.gov> jobsub_submit -g --group annie -N 4000 file://$ANNIEPATH/run_annie_g4dirt_newgenie.sh -r 0 -n ${NEVENTS} -v -i /pnfs/annie/persistent/users/vfischer/genie/BNB_Water_10k_22-05-17 -o /pnfs/annie/persistent/users/moflaher/g4dirt_vincentsgenie/tank
 
 /fife/local/scratch/uploads/annie/moflaher/2016-06-16_142305.291425_5642
 

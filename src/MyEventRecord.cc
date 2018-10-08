@@ -4,6 +4,7 @@
 #include "G4PrimaryParticle.hh"
 #include "G4Track.hh"
 #include "G4StepPoint.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <iomanip>
 

@@ -1,8 +1,24 @@
 SRCDIR=`PWD`
+source /grid/fermiapp/products/common/etc/setup
+export PRODUCTS=${PRODUCTS}:/grid/fermiapp/products/larsoft 
+setup cmake     #sets up 2_8_8
+setup -f Linux64bit+2.6-2.12 -q debug:e10 xerces_c v3_1_3
+export XERCESROOT=/grid/fermiapp/products/larsoft/xerces_c/v3_1_3/Linux64bit+2.6-2.12-e10-debug
+export G4SYSTEM=Linux-g++
+export ROOT_PATH=/grid/fermiapp/products/larsoft/root/v6_06_08/Linux64bit+2.6-2.12-e10-nu-debug/cmake
+export GEANT4_PATH=/grid/fermiapp/products/larsoft/geant4/v4_10_1_p02a/Linux64bit+2.6-2.12-e9-qt-debug/lib64/Geant4-10.1.2
+export GEANT4_MAKEFULL_PATH=/grid/fermiapp/products/larsoft/geant4/v4_10_1_p02a/source/geant4.10.01.p02
+
 source setup_annie.sh
 setup_annie
 mkdir ../build
 cd ../build
+
+setup -f Linux64bit+2.6-2.12 -q debug:e10:r6 genie v2_12_0a
+setup genie_xsec v2_12_0 -q DefaultPlusMECWithNC
+setup genie_phyopt v2_12_0 -q dkcharmtau
+setup -f Linux64bit+2.6-2.12 -q debug:e7 clhep v2_2_0_5
+
 g4cmake=`ls -d ${GEANT4_FQ_DIR}/lib*/Geant4-*`
 clhepcmake=`ls -d ${CLHEP_DIR}/${CLHEP_FQ}/lib/CLHEP-*`
 export CCFORCE=""

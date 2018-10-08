@@ -15,6 +15,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 
 // GENIE headers
 #include "GHEP/GHepParticle.h"
@@ -176,8 +177,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //lv = lv->
   }
   */
-
-G4bool insomethinginteresting = ((vtxvol.find("0x"))!=std::string::npos);
+  
+  G4bool insomethinginteresting = ((vtxvol.find("0x"))!=std::string::npos);
   if ( vtxvol == "TWATER_PV" || insomethinginteresting) {
     intank = 1;
     G4cout << "=========> particles start in " << vtxvol<< " entry " 
@@ -241,6 +242,7 @@ G4bool insomethinginteresting = ((vtxvol.find("0x"))!=std::string::npos);
       new G4PrimaryParticle( partDef, 
                              part->Px()*GeV, part->Py()*GeV, part->Pz()*GeV,
                              part->E()*GeV);
+    g4part->SetProperTime(toffset);
 
     if ( intank ) {
       fMyEventRecord->AppendG4PrimaryParticle(evtVertex,g4part);
