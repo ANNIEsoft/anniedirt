@@ -17,8 +17,8 @@
 #include "Randomize.hh"
 
 // GENIE headers
-#include "GHEP/GHepParticle.h"
-#include "Ntuple/NtpMCTreeHeader.h"
+#include "Framework/GHEP/GHepParticle.h"
+#include "Framework/Ntuple/NtpMCTreeHeader.h"
 
 // ROOT headers
 
@@ -27,6 +27,8 @@
 #include "MyEventRecord.hh"
 
 #include <cstring>
+
+using namespace CLHEP;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -177,10 +179,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
   */
 
-G4bool insomethinginteresting = ((vtxvol.find("0x"))!=std::string::npos);
-  if ( vtxvol == "TWATER_PV" || insomethinginteresting) {
+  G4bool insomethinginteresting = ((vtxvol.find("0x"))!=std::string::npos);
+  if ( vtxvol == "TWATER_PV" || insomethinginteresting ) {
     intank = 1;
-    G4cout << "=========> particles start in " << vtxvol<< " entry " 
+    G4cout << "=========> particles start in " << vtxvol << " entry " 
            << fEntry << G4endl;
   }
   // other posssibilities ? ... tank wall, base, cone, airspace?

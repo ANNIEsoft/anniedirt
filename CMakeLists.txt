@@ -6,8 +6,8 @@
 #
 # WHICH_G4=`ls -d ${GEANT4_FQ_DIR}/lib64/Geant4-*`
 # WHICH_CLHEP=`ls -d ${CLHEP_LIB_DIR}/CLHEP-*`
-# 
-# cmake -DGeant4_DIR=${WHICH_G4} -DCLHEP_DIR=${WHICH_CLHEP}  
+#
+# cmake -DGeant4_DIR=${WHICH_G4} -DCLHEP_DIR=${WHICH_CLHEP}
 #    [ -DWITH_G4NU=ON ] ../G4ANNIE
 #
 #
@@ -36,7 +36,7 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
-find_package(CLHEP REQUIRED)
+#find_package(CLHEP REQUIRED)
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
@@ -55,7 +55,6 @@ include_directories(${G4NUPL}/include)
 
 set(_root_internal_libraries
     Core
-    Cint
     RIO
     Net
     Hist
@@ -82,24 +81,70 @@ link_directories($ENV{ROOTSYS}/lib)
 # GENIE stuff
 #
 
-include_directories($ENV{GENIE}/src)
-link_directories($ENV{GENIE}/lib)
+#include_directories($ENV{GENIE_INSTALL}/include/GENIE)
+include_directories($ENV{GENIE_INSTALL}/src)
+link_directories($ENV{GENIE_INSTALL}/lib)
 
 set(_genie_internal_libraries
-    GAlgorithm GBaryonResonance GBase GBodekYang GCharm GCoh GDfrc GDIS GCrossSections GDecay GElas GElFF GHEP GEVGCore GEVGModules GEVGDrivers GGiBUU GHadronTransp GFragmentation GInteraction GLlewellynSmith GMEC GMessenger GNuGamma GNuE GNtuple GNuclear GNumerical GQPM GPDG GPDF GQEL GRES GRegistry GReinSeghal GUtils GGeo GFluxDrivers GVLE GMuELoss GReWeight GNucleonDecay
+    GFwAlg
+    GFwEG
+    GFwGHEP
+    GFwInt
+    GFwMsg
+    GFwNtp
+    GFwNum
+    GFwParDat
+    GFwReg
+    GFwUtl
+    GPhAMNGEG
+    GPhAMNGXS
+    GPhChmXS
+    GPhCmn
+    GPhCohEG
+    GPhCohXS
+    GPhDISEG
+    GPhDISXS
+    GPhDcy
+    GPhDeEx
+    GPhDfrcEG
+    GPhDfrcXS
+    GPhGlwResEG
+    GPhGlwResXS
+    GPhHadTransp
+    GPhHadnz
+    GPhIBDEG
+    GPhIBDXS
+    GPhMEL
+    GPhMNucEG
+    GPhMNucXS
+    GPhNuElEG
+    GPhNuElXS
+    GPhNuclSt
+    GPhPDF
+    GPhQELEG
+    GPhQELXS
+    GPhResEG
+    GPhResXS
+    GPhStrEG
+    GPhStrXS
+    GPhXSIg
+    GTlFlx
+    GTlGeo
 )
+
+link_directories("/usr/lib64")
+set(_gsl_internal_libraries gsl gslcblas)
 
 include_directories($ENV{LOG4CPP_FQ_DIR}/include)
 link_directories($ENV{LOG4CPP_FQ_DIR}/lib)
-
 set(_log4cpp_internal_libraries log4cpp)
 
-link_directories($ENV{XERCESCROOT}/lib)
-link_directories($ENV{LIBXML2ROOT}/lib)
-
+link_directories($ENV{XERCESCROOT}/lib64)
 set(_xerces_internal_libraries xerces-c xml2)
 
-set(Genie_LIBRARIES ${_genie_internal_libraries} ${_log4cpp_internal_libraries} ${_xerces_internal_libraries} )
+link_directories($ENV{LIBXML2ROOT}/lib)
+
+set(Genie_LIBRARIES ${_genie_internal_libraries} ${_log4cpp_internal_libraries} ${_xerces_internal_libraries} ${_root_internal_libraries} ${_gsl_internal_libraries})
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -116,15 +161,27 @@ if(WITH_G4NU)
    list(REMOVE_ITEM sources ${PROJECT_SOURCE_DIR}/src/AltG4PhysListFactory.cc)
 endif()
 
+set(FILES
+  run_g4dirt.sh
+  )
+
+foreach(_files ${FILES})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_files}
+    ${PROJECT_BINARY_DIR}/${_files}
+    COPYONLY
+    )
+endforeach()
+
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(g4annie_dirt_flux g4annie_dirt_flux.cc ${sources} ${headers})
-target_link_libraries(g4annie_dirt_flux ${Geant4_LIBRARIES} ${Genie_LIBRARIES} ${Root_LIBRARIES} ${G4NU_LIBRARIES})
+target_link_libraries(g4annie_dirt_flux ${Genie_LIBRARIES} ${Geant4_LIBRARIES} ${Root_LIBRARIES} ${G4NU_LIBRARIES})
 
 if(WITH_G4NU)
-  SET_TARGET_PROPERTIES(g4annie_dirt_flux PROPERTIES COMPILE_FLAGS -DWITH_G4NU )
+  SET_TARGET_PROPERTIES(g4annie_dirt_flux PROPERTIES COMPILE_FLAGS -DWITH_G4NU)
 endif()
 
 #----------------------------------------------------------------------------
@@ -157,5 +214,3 @@ add_custom_target(G4SA DEPENDS g4annie_dirt_flux)
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS g4annie_dirt_flux DESTINATION bin)
-
-
